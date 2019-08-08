@@ -1,5 +1,8 @@
 package geektrust.tot.problems;
 
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +37,66 @@ public class GoldernCrown {
 		secretMsg.put(kingdomLand[0], kingdomLand[1].replaceAll("\"", "").trim());
 		secretMsg.put(kingdomIce[0], kingdomIce[1].replaceAll("\"", "").trim());
 		
+		System.out.println(secretMsg);
 		
-		System.out.println(secretMsg);		
+		if(isKing(emblem, secretMsg)) {
+			System.out.println("Who is the ruler of southeros?");
+			System.out.println("King Shan");
+			System.out.println("Allies of Ruler?");
+			System.out.println(secretMsg.keySet());
+		}
+	}
+	
+	public static Boolean isKing(Map emblem, Map secretMsg) {
+		Boolean isKing=true;
+		Map<String, Map> emblemKeyMap = new HashMap();
+		Map<String, Map> msgKeyMap = new HashMap();
+		
+		secretMsg.forEach((K,V) -> {
+			if(emblem.containsKey(K)) {
+				System.out.println("emblem Value : "+emblem.get(K).toString());
+				emblemKeyMap.put((String) K, getCharMap(emblem.get(K).toString()));
+			}
+			
+			msgKeyMap.put((String) K, getCharMap((String)V));
+			
+		}
+				);
+		
+		System.out.println("EMBLEM KEY MAP : "+emblemKeyMap);
+		System.out.println("MESSAGE KEY MAP : "+msgKeyMap);
+		ArrayList l1=new ArrayList();
+		
+		emblemKeyMap.forEach((K, V) -> {
+			V.forEach((K1, V1) -> {
+				if(msgKeyMap.get(K).get(K1)==V1) {
+					l1.add("true");
+				}else {
+					l1.add("false");
+					return;
+				}
+			}
+					);
+			//System.out.println("************\n" +emblemKeyMap.get(K));
+		}
+				);
+		if(l1.contains("false")) {
+			isKing=false;
+		}
+		return isKing;
+	}
+	
+	public static Map getCharMap(String value) {
+		char[] charArray= value.toCharArray();
+		Map<Character, Integer> charMap = new HashMap<Character, Integer>();
+		for(char c : charArray) {
+			if(charMap.containsKey(c)) {
+				charMap.put(c, charMap.get(c)+1);
+			}else {
+				charMap.put(c, 1);
+			}
+		}
+		return charMap;
 	}
 
 }
